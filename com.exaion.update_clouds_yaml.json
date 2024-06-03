@@ -1,0 +1,7 @@
+{
+  "name": "com.exaion.update_clouds_yaml",
+  "description": "Update user’s clouds.yaml file with authentication token",
+  "path": "/usr/lib/openstack_cli_auth/update_clouds_yaml",
+  "type": "stdio",
+  "allowed_extensions": [ "openstack_cli_auth@exaion.com" ]
+}

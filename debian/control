@@ -1,0 +1,22 @@
+Source: webext-openstack-cli-auth
+Section: web
+Priority: optional
+Maintainer: Josselin Mouette
+Build-Depends: debhelper-compat (= 13)
+Standards-Version: 4.6.2
+
+Package: webext-openstack-cli-auth
+Architecture: all
+Depends: ${misc:Depends}, 
+         python3,
+         python3-notify2,
+         python3-ruamel.yaml
+Recommends: firefox-esr (>= 50) | firefox (>= 50), python3-openstackclient
+Built-Using: ${misc:Built-Using}
+Description: Firefox extension for OpenStack CLI authentication
+ OpenStack CLI auth is a Firefox extension that will help you with the openstack
+ CLI when connecting to a cloud that is using authentication methods such as OpenID
+ connect.
+ .
+ It will obtain the authentication token from the web session and copy it in the
+ user’s clouds.yaml file for all clouds that have a matching authentication URL.

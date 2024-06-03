@@ -1,0 +1,61 @@
+#! /usr/bin/python3
+
+import os, sys, json, struct, notify2
+from ruamel.yaml import YAML
+
+# First Firefox sends 4 bytes containing the buffer length
+rawLength = sys.stdin.buffer.read(4)
+if len(rawLength) == 0:
+    sys.exit(0)
+messageLength = struct.unpack('@I', rawLength)[0]
+message = sys.stdin.buffer.read(messageLength).decode('utf-8')
+
+msg = json.loads(message)
+url = msg["url"]
+token = msg["token"]
+
+clouds = os.path.expanduser ("~/.config/openstack/clouds.yaml")
+backup = clouds+".ff-backup"
+
+if not os.path.isfile (clouds):
+    sys.exit(0)
+
+y = YAML()
+contents = y.load(open(clouds))
+
+if not "clouds" in contents:
+    sys.exit(0)
+
+changed = []
+for cloud in contents["clouds"]:
+    try:
+        auth_url = contents["clouds"][cloud]["auth"]["auth_url"]
+    except KeyError:
+        continue
+    if url.startswith(auth_url):
+        contents["clouds"][cloud]["auth_type"]="token"
+        contents["clouds"][cloud]["auth"]["token"]=token
+        try:
+            del contents["clouds"][cloud]["auth"]["username"]
+            del contents["clouds"][cloud]["auth"]["user_domain_name"]
+        except KeyError:
+            pass
+        changed.append(cloud)
+
+if not changed:
+    sys.exit(0)
+
+if not os.path.isfile (backup):
+    os.rename(clouds, backup)
+
+out = os.open(
+    clouds,
+    flags = (os.O_WRONLY|os.O_CREAT|os.O_TRUNC),
+    mode = 0o600
+)
+y.dump(contents, open(out,"w"))
+
+notify2.init("update_clouds_yaml")
+n = "New OpenStack authentication token for %s"%(", ".join(changed))
+notify2.Notification(n, "Your clouds.yaml file has been updated accordingly.").show()
+

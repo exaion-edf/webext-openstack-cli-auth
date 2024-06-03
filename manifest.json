@@ -1,0 +1,24 @@
+{
+  "name": "Openstack CLI auth",
+  "description": "Propagate Openstack OpenID authentication to the user’s clouds.yaml",
+  "manifest_version": 3,
+  "version": "0.3",
+  "author": "Josselin Mouette",
+
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "openstack_cli_auth@exaion.com",
+      "strict_min_version": "50.0"
+    }
+  },
+
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "content_scripts": [{
+    "matches": ["https://*/*/OS-FEDERATION/identity_providers/*"],
+    "js": ["authent.js"]
+   }],
+
+  "permissions": ["nativeMessaging"]
+}

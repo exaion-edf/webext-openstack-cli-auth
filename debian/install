@@ -1,0 +1,4 @@
+*.js		/usr/share/mozilla/extensions/{ec8030f7-c20a-464f-9b0e-13a3a9e97384}/openstack_cli_auth@exaion.com
+manifest.json	/usr/share/mozilla/extensions/{ec8030f7-c20a-464f-9b0e-13a3a9e97384}/openstack_cli_auth@exaion.com
+com.exaion.update_clouds_yaml.json	/usr/lib/mozilla/native-messaging-hosts
+update_clouds_yaml			/usr/lib/openstack_cli_auth
